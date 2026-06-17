@@ -1,0 +1,509 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Exercises template         %
+%                            %
+% CC BY 2026 Thomas M. Prinz %
+% Thomas.Prinz@uni-jena.de   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\documentclass[a4paper,10pt]{exam}
+
+\usepackage{sdapsbase}
+
+\usepackage{amssymb}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2mm]{geometry} % Thin margins to maximize space
+\usepackage{tcolorbox} % For boxed areas
+\makeatletter
+\def\next#1\cr#2\@nil{\def\@cline##1-##2\@nil{#1\cr\nopagebreak#2}}
+\expandafter\next\@cline#1-#2\@nil\@nil
+\makeatother
+\newcommand{\cir}{
+  \put(0,0.1){\circle{.25}}
+}
+\usepackage{adjustbox}
+
+%%% SDAPS
+\ExplSyntaxOn
+\let\internQuestStart\sdaps_qobject_begin:nnn
+\let\internSDAPSSet\sdaps_context_set:n%
+\let\questAnswer\sdaps_answer:n
+\let\internSingleChoice\sdaps_checkbox:nn
+\let\internTextBox\sdaps_textbox_hstretch:nnnnn
+\let\internCheck\sdaps_checkbox:nn
+\let\questEnd\sdaps_qobject_end:n
+\let\questCheckBoxType\sdaps_checkbox_set_type:n
+\let\mysetcheckboxtype\sdaps_checkbox_set_type:n
+\ExplSyntaxOff
+\newcommand{\questStart}[3]{%
+  \internQuestStart{#1}{#2}{#3}%
+  \internSDAPSSet{singlechoice = {width=2.5mm, height=2.5mm, linewidth=0.5bp}}%
+  \internSDAPSSet{multichoice = {width=2.5mm, height=2.5mm, linewidth=0.5bp}}%
+}
+\newcommand{\questSingleChoice}[2]{\phantom{ }\put(-1.25mm,-0.03){\internSingleChoice{#1}{#2}\questAnswer{#2}}}
+\newcommand{\questCheck}[2]{\phantom{ }\put(-1.25mm,-0.03){\internCheck{#1}{#2}\questAnswer{#2}}}
+\newcommand{\questTextBox}[3]{\parbox[c][\dimexpr #2 + 0.5cm\relax]{#3}{\internTextBox{#1}{0.5bp}{#2}{#3}{0}}\questAnswer{#2}}
+
+
+%\checkboxchar{$\Box$} % Definiert das Symbol
+
+% Set up tcolorbox style
+\tcbset{colback=white,colframe=black,size=small,sharp corners,box align=center}
+
+
+\usepackage[inkscapeformat=pdf,inkscapelatex=false]{svg}
+
+\def\nritems{0.16}
+\def\nritemsheight{0.13}
+\def\sizeinstr{0.1}
+\def\sizemeta{0.02}
+\def\sizeself{0.12}
+
+\newcommand{\qitem}[8]{%
+% #1: id of the item
+% #2: level of the item
+% #3: name of the item
+% #4: Answer 1
+% #5: Answer 2
+% #6: Answer 3
+% #7: Answer 4
+% #8: Answer 5
+\begin{tcolorbox}[height=\nritems\textheight]%
+\begin{minipage}[c]{0.6\textwidth}%
+\includesvg[width=0.80\textwidth]{../items/level-#2/#3.svg}%
+\end{minipage}\hfill%
+\begin{minipage}[c]{0.4\textwidth}%
+  \question \label{q:#1} \textbf{[#1]} What faults can you identify in the process model on the left? [Multiple answers possible]%
+  \vspace{0.2cm}%
+  \begin{checkboxes}%
+    #4%
+    #5%
+	#6%
+	#7%
+	#8%
+  \end{checkboxes}%
+\end{minipage}%
+\end{tcolorbox}%
+}
+
+\newcommand{\oitem}[3]{%
+% #1: id of the item
+% #2: level of the item
+% #3: name of the item
+\begin{tcolorbox}[width=0.95\textwidth,height=\nritems\textheight]%
+\centering
+\includesvg[height=\nritemsheight\textheight]{../items/level-#2/#3.svg}\\%
+%
+\questSingleChoice{#1}{1} \phantom{m} This process model is sound. %
+\hspace{2cm} %
+\questSingleChoice{#1}{9999} \phantom{m} No answer
+\end{tcolorbox}%
+}
+\newcommand{\ooitem}[3]{%
+% #1: id of the item
+% #2: level of the item
+% #3: name of the item
+\begin{tcolorbox}[width=0.95\textwidth,height=\nritems\textheight]%
+\centering
+\includesvg[height=\nritemsheight\textheight]{../items/level-#2/#3.svg}\\ %
+%
+\questSingleChoice{#1}{9999} \phantom{m} No answer
+\end{tcolorbox}%
+}
+
+\newcommand{\ohitem}[3]{%
+% #1: id of the item
+% #2: level of the item
+% #3: name of the item
+\begin{tcolorbox}[width=0.465\textwidth,height=\nritems\textheight]%
+\centering
+\includesvg[height=\nritemsheight\textheight]{../items/level-#2/#3.svg}\\ %
+%
+\questSingleChoice{#1}{1} \phantom{m} This process model is sound. %
+\hspace{2cm} %
+\questSingleChoice{#1}{9999} \phantom{m} No answer
+\end{tcolorbox}%
+}
+\newcommand{\oohitem}[3]{%
+% #1: id of the item
+% #2: level of the item
+% #3: name of the item
+\begin{tcolorbox}[width=0.465\textwidth,height=\nritems\textheight]%
+\centering
+\includesvg[height=\nritemsheight\textheight]{../items/level-#2/#3.svg}\\ %
+%
+\questSingleChoice{#1}{9999} \phantom{m} No answer
+\end{tcolorbox}%
+}
+
+\newcommand{\twoitem}[6]{%
+\begin{tabular}{@{}cc@{}}
+\ohitem{#1}{#2}{#3} &%
+\ohitem{#4}{#5}{#6}
+\end{tabular}
+}
+\newcommand{\otwoitem}[6]{%
+\begin{tabular}{@{}cc@{}}
+\oohitem{#1}{#2}{#3} &%
+\oohitem{#4}{#5}{#6}
+\end{tabular}
+}
+
+\newcommand{\oinstr}[1]{%
+% #1: id of the item
+% #2: level of the item
+% #3: name of the item
+\begin{tcolorbox}[top=5mm,right=0.05\textwidth,bottom=5mm,left=0mm,colframe=white,height=\sizeinstr\textheight]%
+\normalsize #1
+\end{tcolorbox}%
+}
+
+\newcommand{\metainfo}[3]{%
+\begin{tabular}{@{}ccc@{}}
+\begin{tcolorbox}[top=0mm,width=0.30\textwidth,bottom=5mm,left=0mm,colframe=black,height=\sizemeta\textheight]%
+\large #1
+\end{tcolorbox}&%
+\begin{tcolorbox}[top=0mm,width=0.30\textwidth,bottom=5mm,left=0mm,colframe=black,height=\sizemeta\textheight]%
+\centering \Large \textbf{#2}
+\end{tcolorbox}&%
+\begin{tcolorbox}[top=0mm,width=0.31\textwidth,bottom=5mm,left=0mm,colframe=black,height=\sizemeta\textheight]%
+#3
+\end{tcolorbox}%
+\end{tabular}
+}
+
+\newcommand{\metaself}[1]{%
+% 1: Content
+\begin{tcolorbox}[top=0mm,right=0mm,bottom=0mm,left=0mm,colframe=white,height=\sizeself\textheight]%
+#1
+\end{tcolorbox}%
+}
+
+\begin{document}
+
+\pagestyle{empty} % Remove page numbers
+
+\begin{questions}
+\metainfo{June 3rd 2026}{A --- Pre}{}
+%\oinstr{%
+%Please consider the following business process models. %
+%What modeling errors can you identify that would cause the model to behave \emph{unsound}? %
+%\textbf{Mark each modeling error (as nodes, flows, subgraphs, etc.) with a circle.} %
+%\textbf{If you cannot identify any modeling errors (i.\,e., the model is error-free in your opinion), mark this exercise with a checkmark $\checkmark$ in the upper right corner.}
+%If you cannot solve an exercise, please leave it blank. %
+%\emph{Please note that this is just a practice exercise (inclusively an experiment) that will not affect your final exam in any way. %
+%It is okay to make mistakes.}
+%}
+\metaself{%
+\mysetcheckboxtype{singlechoice}%
+%
+\begin{tabular}{lcccccccc}
+    \multicolumn{1}{l}{Your motivation and attitudes \footnotesize(\emph{1=not at all true of me \ldots 7=very true of me})} & \multicolumn{1}{c}{\footnotesize{\emph{1}}} & \multicolumn{1}{c}{\footnotesize{\emph{2}}} & \multicolumn{1}{c}{\footnotesize{\emph{3}}} & \multicolumn{1}{c}{\footnotesize{\emph{4}}} & \multicolumn{1}{c}{\footnotesize{\emph{5}}} & \multicolumn{1}{c}{\footnotesize{\emph{6}}} & \multicolumn{1}{c}{\footnotesize{\emph{7}}} & \multicolumn{1}{c}{{\footnotesize{\emph{n/a}}}} \\
+    \hline \\[-2mm]
+
+   I am very interested in the content area of this lecture. & \multicolumn{1}{c}{\questSingleChoice{a}{1}} & \multicolumn{1}{c}{\questSingleChoice{a}{2}} & \multicolumn{1}{c}{\questSingleChoice{a}{3}} &  \multicolumn{1}{c}{\questSingleChoice{a}{4}} & \multicolumn{1}{c}{\questSingleChoice{a}{5}} & \multicolumn{1}{c}{\questSingleChoice{a}{6}} & \multicolumn{1}{c}{\questSingleChoice{a}{7}} &  \multicolumn{1}{c}{\questSingleChoice{a}{9999}} \\[2mm]
+	 
+	 I am certain I can master the skills being taught in this lecture. & \multicolumn{1}{c}{\questSingleChoice{b}{1}} & \multicolumn{1}{c}{\questSingleChoice{b}{2}} & \multicolumn{1}{c}{\questSingleChoice{b}{3}} &  \multicolumn{1}{c}{\questSingleChoice{b}{4}} & \multicolumn{1}{c}{\questSingleChoice{b}{5}} & \multicolumn{1}{c}{\questSingleChoice{b}{6}} & \multicolumn{1}{c}{\questSingleChoice{b}{7}} &  \multicolumn{1}{c}{\questSingleChoice{b}{9999}} \\[2mm]
+	
+	I am confident I can understand the most complex material presented in this lecture. & \multicolumn{1}{c}{\questSingleChoice{c}{1}} & \multicolumn{1}{c}{\questSingleChoice{c}{2}} & \multicolumn{1}{c}{\questSingleChoice{c}{3}} &  \multicolumn{1}{c}{\questSingleChoice{c}{4}} & \multicolumn{1}{c}{\questSingleChoice{c}{5}} & \multicolumn{1}{c}{\questSingleChoice{c}{6}} & \multicolumn{1}{c}{\questSingleChoice{c}{7}} &  \multicolumn{1}{c}{\questSingleChoice{c}{9999}} \\[2mm]
+	
+	I am confident I can understand the basic concepts taught in this lecture. & \multicolumn{1}{c}{\questSingleChoice{d}{1}} & \multicolumn{1}{c}{\questSingleChoice{d}{2}} & \multicolumn{1}{c}{\questSingleChoice{d}{3}} &  \multicolumn{1}{c}{\questSingleChoice{d}{4}} & \multicolumn{1}{c}{\questSingleChoice{d}{5}} & \multicolumn{1}{c}{\questSingleChoice{d}{6}} & \multicolumn{1}{c}{\questSingleChoice{d}{7}} &  \multicolumn{1}{c}{\questSingleChoice{d}{9999}} \\[2mm]
+	
+ \hline
+\end{tabular}
+}
+
+
+%\twoitem{2}{1}{XOR-AND}{8}{1}{OR-AND}
+\oitem{2}{1}{XOR-AND}
+
+%\twoitem{11}{2}{loop-XOR-AND}{16}{2}{loop-OR-XOR}
+\oitem{16}{2}{loop-OR-XOR}
+
+\oitem{47}{5}{diff-15-unsound}
+
+\oitem{20}{3}{loop-live-lock-02}
+
+\oitem{27}{4}{loop-X-A-X-X}
+
+
+\newpage
+%\oinstr{%
+%  Please examine the following business process models. %
+%  Some of the gateways have been left blank.
+%  \textbf{Please draw the simplest type of gateway in the blank gateways so that the resulting model is \emph{sound}.} %
+%  \textbf{If no gateways have been left blank, please specify the simplest solution to make the process model \emph{sound}.}
+%  If you cannot solve an exercise, please just leave it blank. %
+%  \emph{Please note that this is just a practice exercise (inclusively an experiment) that will not affect your final exam in any way. %
+%    It is okay to make mistakes.}
+%}
+
+%\otwoitem{51}{6}{AND-Free}{52}{6}{Free-AND}
+\ooitem{51}{6}{AND-Free}
+
+%\otwoitem{58}{7}{loop-Free-XOR}{59}{7}{loop-OR-Free}
+\ooitem{59}{7}{loop-OR-Free}
+
+\ooitem{83}{10}{diff-10-unsound}
+
+\ooitem{62}{8}{loop-live-lock-1}
+
+\ooitem{72}{9}{loop-X-O-Free-Free}
+
+\begin{tabular}{llllllll}
+    % Gender
+    \multicolumn{2}{l}{Please specify your gender:} &
+    \questSingleChoice{gender}{0} \phantom{m} female &
+    \questSingleChoice{gender}{1} \phantom{m} male &
+    \questSingleChoice{gender}{2} \phantom{m} diverse &
+    \questSingleChoice{gender}{9999} \phantom{m} no answer && \\[2mm]%
+		%
+		\multicolumn{2}{l}{Please specify your age (in years):} &
+		\multicolumn{6}{l}{\questTextBox{age1}{0.75cm}{0.75cm}\questTextBox{age2}{0.75cm}{0.75cm}}  \\[2mm]%
+		%
+		\multicolumn{2}{l}{Please indicate your current degree program:} &
+    \multicolumn{2}{p{4cm}}{\questSingleChoice{degree}{1} \phantom{m} Bachelor of Science\newline%
+		\questSingleChoice{degree}{2} \phantom{m} Master of Science} &
+    \multicolumn{2}{l}{\questSingleChoice{degree}{3} \phantom{m} Other} &
+    \multicolumn{2}{l}{\questSingleChoice{degree}{9999} \phantom{m} No answer} \\[8mm] %
+		%
+		\multicolumn{2}{p{6cm}}{If applicable, please indicate the course of your undergraduate studies:} &
+    \multicolumn{2}{p{4cm}}{\questSingleChoice{bcourse}{1} \phantom{m} Computer Science\newline%
+		\questSingleChoice{bcourse}{2} \phantom{m} Economics} &
+    %\multicolumn{2}{l}{} &
+		\multicolumn{2}{l}{\questSingleChoice{bcourse}{3} \phantom{m} Business Informatics} &
+    \multicolumn{2}{p{3cm}}{\questSingleChoice{bcourse}{4} \phantom{m} Other\newline%
+		\questSingleChoice{bcourse}{9999} \phantom{m} No answer} \\[2mm]
+		%
+		%\multicolumn{2}{l}{Please specify your current semester:} &
+		%\multicolumn{6}{l}{\questTextBox{semester1}{0.75cm}{0.75cm}\questTextBox{semester2}{0.75cm}{0.75cm}}  \\[2mm]%
+\end{tabular}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% POST
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\metainfo{June 3rd 2026}{A --- Post}{}
+
+\metaself{%
+\mysetcheckboxtype{singlechoice}%
+%
+\begin{tabular}{lcccccccc}
+    \multicolumn{1}{l}{Your motivation and attitudes \footnotesize(\emph{1=not at all true of me \ldots 7=very true of me})} & \multicolumn{1}{c}{\footnotesize{\emph{1}}} & \multicolumn{1}{c}{\footnotesize{\emph{2}}} & \multicolumn{1}{c}{\footnotesize{\emph{3}}} & \multicolumn{1}{c}{\footnotesize{\emph{4}}} & \multicolumn{1}{c}{\footnotesize{\emph{5}}} & \multicolumn{1}{c}{\footnotesize{\emph{6}}} & \multicolumn{1}{c}{\footnotesize{\emph{7}}} & \multicolumn{1}{c}{{\footnotesize{\emph{n/a}}}} \\
+    \hline \\[-2mm]
+
+	 In this lecture, I learned a great deal. & \multicolumn{1}{c}{\questSingleChoice{poste}{1}} & \multicolumn{1}{c}{\questSingleChoice{poste}{2}} & \multicolumn{1}{c}{\questSingleChoice{poste}{3}} &  \multicolumn{1}{c}{\questSingleChoice{poste}{4}} & \multicolumn{1}{c}{\questSingleChoice{poste}{5}} & \multicolumn{1}{c}{\questSingleChoice{poste}{6}} & \multicolumn{1}{c}{\questSingleChoice{poste}{7}} &  \multicolumn{1}{c}{\questSingleChoice{poste}{9999}} \\[2mm]
+
+   I am very interested in the content area of this lecture. & \multicolumn{1}{c}{\questSingleChoice{posta}{1}} & \multicolumn{1}{c}{\questSingleChoice{posta}{2}} & \multicolumn{1}{c}{\questSingleChoice{posta}{3}} &  \multicolumn{1}{c}{\questSingleChoice{posta}{4}} & \multicolumn{1}{c}{\questSingleChoice{posta}{5}} & \multicolumn{1}{c}{\questSingleChoice{posta}{6}} & \multicolumn{1}{c}{\questSingleChoice{posta}{7}} &  \multicolumn{1}{c}{\questSingleChoice{posta}{9999}} \\[2mm]
+	 
+	 I am certain I can master the skills being taught in this lecture. & \multicolumn{1}{c}{\questSingleChoice{postb}{1}} & \multicolumn{1}{c}{\questSingleChoice{postb}{2}} & \multicolumn{1}{c}{\questSingleChoice{postb}{3}} &  \multicolumn{1}{c}{\questSingleChoice{postb}{4}} & \multicolumn{1}{c}{\questSingleChoice{postb}{5}} & \multicolumn{1}{c}{\questSingleChoice{postb}{6}} & \multicolumn{1}{c}{\questSingleChoice{postb}{7}} &  \multicolumn{1}{c}{\questSingleChoice{postb}{9999}} \\[2mm]
+	
+	I am confident I can understand the most complex material presented in this lecture. & \multicolumn{1}{c}{\questSingleChoice{postc}{1}} & \multicolumn{1}{c}{\questSingleChoice{postc}{2}} & \multicolumn{1}{c}{\questSingleChoice{postc}{3}} &  \multicolumn{1}{c}{\questSingleChoice{postc}{4}} & \multicolumn{1}{c}{\questSingleChoice{postc}{5}} & \multicolumn{1}{c}{\questSingleChoice{postc}{6}} & \multicolumn{1}{c}{\questSingleChoice{postc}{7}} &  \multicolumn{1}{c}{\questSingleChoice{postc}{9999}} \\[2mm]
+	
+	I am confident I can understand the basic concepts taught in this lecture. & \multicolumn{1}{c}{\questSingleChoice{postd}{1}} & \multicolumn{1}{c}{\questSingleChoice{postd}{2}} & \multicolumn{1}{c}{\questSingleChoice{postd}{3}} &  \multicolumn{1}{c}{\questSingleChoice{postd}{4}} & \multicolumn{1}{c}{\questSingleChoice{postd}{5}} & \multicolumn{1}{c}{\questSingleChoice{postd}{6}} & \multicolumn{1}{c}{\questSingleChoice{postd}{7}} &  \multicolumn{1}{c}{\questSingleChoice{postd}{9999}} \\[2mm]
+	
+ \hline
+\end{tabular}
+}
+
+%\twoitem{2}{1}{XOR-AND}{8}{1}{OR-AND}
+\oitem{8}{1}{OR-AND}
+
+%\twoitem{11}{2}{loop-XOR-AND}{16}{2}{loop-OR-XOR}
+\oitem{11}{2}{loop-XOR-AND}
+
+\oitem{20}{3}{loop-live-lock-02}
+
+\oitem{47}{5}{diff-15-unsound}
+
+\oitem{27}{4}{loop-X-A-X-X}
+
+\newpage
+
+%\otwoitem{51}{6}{AND-Free}{52}{6}{Free-AND}
+\ooitem{52}{6}{Free-AND}
+
+%\otwoitem{58}{7}{loop-Free-XOR}{59}{7}{loop-OR-Free}
+\ooitem{58}{7}{loop-Free-XOR}
+
+\ooitem{62}{8}{loop-live-lock-1}
+
+\ooitem{83}{10}{diff-10-unsound}
+
+\ooitem{72}{9}{loop-X-O-Free-Free}
+
+\metaself{}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% B %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\metainfo{June 3rd 2026}{B --- Pre}{}
+%\oinstr{%
+%Please consider the following business process models. %
+%What modeling errors can you identify that would cause the model to behave \emph{unsound}? %
+%\textbf{Mark each modeling error (as nodes, flows, subgraphs, etc.) with a circle.} %
+%\textbf{If you cannot identify any modeling errors (i.\,e., the model is error-free in your opinion), mark this exercise with a checkmark $\checkmark$ in the upper right corner.}
+%If you cannot solve an exercise, please leave it blank. %
+%\emph{Please note that this is just a practice exercise (inclusively an experiment) that will not affect your final exam in any way. %
+%It is okay to make mistakes.}
+%}
+\metaself{%
+\mysetcheckboxtype{singlechoice}%
+%
+\begin{tabular}{lcccccccc}
+    \multicolumn{1}{l}{Your motivation and attitudes \footnotesize(\emph{1=not at all true of me \ldots 7=very true of me})} & \multicolumn{1}{c}{\footnotesize{\emph{1}}} & \multicolumn{1}{c}{\footnotesize{\emph{2}}} & \multicolumn{1}{c}{\footnotesize{\emph{3}}} & \multicolumn{1}{c}{\footnotesize{\emph{4}}} & \multicolumn{1}{c}{\footnotesize{\emph{5}}} & \multicolumn{1}{c}{\footnotesize{\emph{6}}} & \multicolumn{1}{c}{\footnotesize{\emph{7}}} & \multicolumn{1}{c}{{\footnotesize{\emph{n/a}}}} \\
+    \hline \\[-2mm]
+
+   I am very interested in the content area of this lecture. & \multicolumn{1}{c}{\questSingleChoice{a}{1}} & \multicolumn{1}{c}{\questSingleChoice{a}{2}} & \multicolumn{1}{c}{\questSingleChoice{a}{3}} &  \multicolumn{1}{c}{\questSingleChoice{a}{4}} & \multicolumn{1}{c}{\questSingleChoice{a}{5}} & \multicolumn{1}{c}{\questSingleChoice{a}{6}} & \multicolumn{1}{c}{\questSingleChoice{a}{7}} &  \multicolumn{1}{c}{\questSingleChoice{a}{9999}} \\[2mm]
+	 
+	 I am certain I can master the skills being taught in this lecture. & \multicolumn{1}{c}{\questSingleChoice{b}{1}} & \multicolumn{1}{c}{\questSingleChoice{b}{2}} & \multicolumn{1}{c}{\questSingleChoice{b}{3}} &  \multicolumn{1}{c}{\questSingleChoice{b}{4}} & \multicolumn{1}{c}{\questSingleChoice{b}{5}} & \multicolumn{1}{c}{\questSingleChoice{b}{6}} & \multicolumn{1}{c}{\questSingleChoice{b}{7}} &  \multicolumn{1}{c}{\questSingleChoice{b}{9999}} \\[2mm]
+	
+	I am confident I can understand the most complex material presented in this lecture. & \multicolumn{1}{c}{\questSingleChoice{c}{1}} & \multicolumn{1}{c}{\questSingleChoice{c}{2}} & \multicolumn{1}{c}{\questSingleChoice{c}{3}} &  \multicolumn{1}{c}{\questSingleChoice{c}{4}} & \multicolumn{1}{c}{\questSingleChoice{c}{5}} & \multicolumn{1}{c}{\questSingleChoice{c}{6}} & \multicolumn{1}{c}{\questSingleChoice{c}{7}} &  \multicolumn{1}{c}{\questSingleChoice{c}{9999}} \\[2mm]
+	
+	I am confident I can understand the basic concepts taught in this lecture. & \multicolumn{1}{c}{\questSingleChoice{d}{1}} & \multicolumn{1}{c}{\questSingleChoice{d}{2}} & \multicolumn{1}{c}{\questSingleChoice{d}{3}} &  \multicolumn{1}{c}{\questSingleChoice{d}{4}} & \multicolumn{1}{c}{\questSingleChoice{d}{5}} & \multicolumn{1}{c}{\questSingleChoice{d}{6}} & \multicolumn{1}{c}{\questSingleChoice{d}{7}} &  \multicolumn{1}{c}{\questSingleChoice{d}{9999}} \\[2mm]
+	
+ \hline
+\end{tabular}
+}
+
+%\twoitem{2}{1}{XOR-AND}{8}{1}{OR-AND}
+\oitem{8}{1}{OR-AND}
+
+%\twoitem{11}{2}{loop-XOR-AND}{16}{2}{loop-OR-XOR}
+\oitem{11}{2}{loop-XOR-AND}
+
+\oitem{20}{3}{loop-live-lock-02}
+
+\oitem{47}{5}{diff-15-unsound}
+
+\oitem{27}{4}{loop-X-A-X-X}
+
+\newpage
+
+%\otwoitem{51}{6}{AND-Free}{52}{6}{Free-AND}
+\ooitem{52}{6}{Free-AND}
+
+%\otwoitem{58}{7}{loop-Free-XOR}{59}{7}{loop-OR-Free}
+\ooitem{58}{7}{loop-Free-XOR}
+
+\ooitem{62}{8}{loop-live-lock-1}
+
+\ooitem{83}{10}{diff-10-unsound}
+
+\ooitem{72}{9}{loop-X-O-Free-Free}
+
+
+\begin{tabular}{llllllll}
+    % Gender
+    \multicolumn{2}{l}{Please specify your gender:} &
+    \questSingleChoice{gender}{0} \phantom{m} female &
+    \questSingleChoice{gender}{1} \phantom{m} male &
+    \questSingleChoice{gender}{2} \phantom{m} diverse &
+    \questSingleChoice{gender}{9999} \phantom{m} no answer && \\[2mm]%
+		%
+		\multicolumn{2}{l}{Please specify your age (in years):} &
+		\multicolumn{6}{l}{\questTextBox{age1}{0.75cm}{0.75cm}\questTextBox{age2}{0.75cm}{0.75cm}}  \\[2mm]%
+		%
+		\multicolumn{2}{l}{Please indicate your current degree program:} &
+    \multicolumn{2}{p{4cm}}{\questSingleChoice{degree}{1} \phantom{m} Bachelor of Science\newline%
+		\questSingleChoice{degree}{2} \phantom{m} Master of Science} &
+    \multicolumn{2}{l}{\questSingleChoice{degree}{3} \phantom{m} Other} &
+    \multicolumn{2}{l}{\questSingleChoice{degree}{9999} \phantom{m} No answer} \\[8mm] %
+		%
+		\multicolumn{2}{p{6cm}}{If applicable, please indicate the course of your undergraduate studies:} &
+    \multicolumn{2}{p{4cm}}{\questSingleChoice{bcourse}{1} \phantom{m} Computer Science\newline%
+		\questSingleChoice{bcourse}{2} \phantom{m} Economics} &
+    %\multicolumn{2}{l}{} &
+		\multicolumn{2}{l}{\questSingleChoice{bcourse}{3} \phantom{m} Business Informatics} &
+    \multicolumn{2}{p{3cm}}{\questSingleChoice{bcourse}{4} \phantom{m} Other\newline%
+		\questSingleChoice{bcourse}{9999} \phantom{m} No answer} \\[2mm]
+		%
+		%\multicolumn{2}{l}{Please specify your current semester:} &
+		%\multicolumn{6}{l}{\questTextBox{semester1}{0.75cm}{0.75cm}\questTextBox{semester2}{0.75cm}{0.75cm}}  \\[2mm]%
+\end{tabular}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% POST
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\metainfo{June 3rd 2026}{B --- Post}{}
+
+\metaself{%
+\mysetcheckboxtype{singlechoice}%
+%
+\begin{tabular}{lcccccccc}
+    \multicolumn{1}{l}{Your motivation and attitudes \footnotesize(\emph{1=not at all true of me \ldots 7=very true of me})} & \multicolumn{1}{c}{\footnotesize{\emph{1}}} & \multicolumn{1}{c}{\footnotesize{\emph{2}}} & \multicolumn{1}{c}{\footnotesize{\emph{3}}} & \multicolumn{1}{c}{\footnotesize{\emph{4}}} & \multicolumn{1}{c}{\footnotesize{\emph{5}}} & \multicolumn{1}{c}{\footnotesize{\emph{6}}} & \multicolumn{1}{c}{\footnotesize{\emph{7}}} & \multicolumn{1}{c}{{\footnotesize{\emph{n/a}}}} \\
+    \hline \\[-2mm]
+
+	 In this lecture, I learned a great deal. & \multicolumn{1}{c}{\questSingleChoice{poste}{1}} & \multicolumn{1}{c}{\questSingleChoice{poste}{2}} & \multicolumn{1}{c}{\questSingleChoice{poste}{3}} &  \multicolumn{1}{c}{\questSingleChoice{poste}{4}} & \multicolumn{1}{c}{\questSingleChoice{poste}{5}} & \multicolumn{1}{c}{\questSingleChoice{poste}{6}} & \multicolumn{1}{c}{\questSingleChoice{poste}{7}} &  \multicolumn{1}{c}{\questSingleChoice{poste}{9999}} \\[2mm]
+
+   I am very interested in the content area of this lecture. & \multicolumn{1}{c}{\questSingleChoice{posta}{1}} & \multicolumn{1}{c}{\questSingleChoice{posta}{2}} & \multicolumn{1}{c}{\questSingleChoice{posta}{3}} &  \multicolumn{1}{c}{\questSingleChoice{posta}{4}} & \multicolumn{1}{c}{\questSingleChoice{posta}{5}} & \multicolumn{1}{c}{\questSingleChoice{posta}{6}} & \multicolumn{1}{c}{\questSingleChoice{posta}{7}} &  \multicolumn{1}{c}{\questSingleChoice{posta}{9999}} \\[2mm]
+	 
+	 I am certain I can master the skills being taught in this lecture. & \multicolumn{1}{c}{\questSingleChoice{postb}{1}} & \multicolumn{1}{c}{\questSingleChoice{postb}{2}} & \multicolumn{1}{c}{\questSingleChoice{postb}{3}} &  \multicolumn{1}{c}{\questSingleChoice{postb}{4}} & \multicolumn{1}{c}{\questSingleChoice{postb}{5}} & \multicolumn{1}{c}{\questSingleChoice{postb}{6}} & \multicolumn{1}{c}{\questSingleChoice{postb}{7}} &  \multicolumn{1}{c}{\questSingleChoice{postb}{9999}} \\[2mm]
+	
+	I am confident I can understand the most complex material presented in this lecture. & \multicolumn{1}{c}{\questSingleChoice{postc}{1}} & \multicolumn{1}{c}{\questSingleChoice{postc}{2}} & \multicolumn{1}{c}{\questSingleChoice{postc}{3}} &  \multicolumn{1}{c}{\questSingleChoice{postc}{4}} & \multicolumn{1}{c}{\questSingleChoice{postc}{5}} & \multicolumn{1}{c}{\questSingleChoice{postc}{6}} & \multicolumn{1}{c}{\questSingleChoice{postc}{7}} &  \multicolumn{1}{c}{\questSingleChoice{postc}{9999}} \\[2mm]
+	
+	I am confident I can understand the basic concepts taught in this lecture. & \multicolumn{1}{c}{\questSingleChoice{postd}{1}} & \multicolumn{1}{c}{\questSingleChoice{postd}{2}} & \multicolumn{1}{c}{\questSingleChoice{postd}{3}} &  \multicolumn{1}{c}{\questSingleChoice{postd}{4}} & \multicolumn{1}{c}{\questSingleChoice{postd}{5}} & \multicolumn{1}{c}{\questSingleChoice{postd}{6}} & \multicolumn{1}{c}{\questSingleChoice{postd}{7}} &  \multicolumn{1}{c}{\questSingleChoice{postd}{9999}} \\[2mm]
+	
+ \hline
+\end{tabular}
+}
+
+%\twoitem{2}{1}{XOR-AND}{8}{1}{OR-AND}
+\oitem{2}{1}{XOR-AND}
+
+%\twoitem{11}{2}{loop-XOR-AND}{16}{2}{loop-OR-XOR}
+\oitem{16}{2}{loop-OR-XOR}
+
+\oitem{47}{5}{diff-15-unsound}
+
+\oitem{20}{3}{loop-live-lock-02}
+
+\oitem{27}{4}{loop-X-A-X-X}
+
+\newpage
+
+%\otwoitem{51}{6}{AND-Free}{52}{6}{Free-AND}
+\ooitem{51}{6}{AND-Free}
+
+%\otwoitem{58}{7}{loop-Free-XOR}{59}{7}{loop-OR-Free}
+\ooitem{59}{7}{loop-OR-Free}
+
+\ooitem{83}{10}{diff-10-unsound}
+
+\ooitem{62}{8}{loop-live-lock-1}
+
+\ooitem{72}{9}{loop-X-O-Free-Free}
+
+\metaself{}
+
+  \end{questions}
+\end{document}
