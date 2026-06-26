@@ -1,0 +1,107 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Single exercise template   %
+%                            %
+% CC BY 2026 Thomas M. Prinz %
+% Thomas.Prinz@uni-jena.de   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\documentclass{standalone}
+
+\usepackage{sdapsbase}
+
+\usepackage{amssymb}
+
+\usepackage[utf8]{inputenc}
+\usepackage{tcolorbox} % For boxed areas
+\makeatletter
+\def\next#1\cr#2\@nil{\def\@cline##1-##2\@nil{#1\cr\nopagebreak#2}}
+\expandafter\next\@cline#1-#2\@nil\@nil
+\makeatother
+\newcommand{\cir}{
+  \put(0,0.1){\circle{.25}}
+}
+\usepackage{adjustbox}
+
+%%% SDAPS
+\ExplSyntaxOn
+\let\internQuestStart\sdaps_qobject_begin:nnn
+\let\internSDAPSSet\sdaps_context_set:n%
+\let\questAnswer\sdaps_answer:n
+\let\internSingleChoice\sdaps_checkbox:nn
+\let\internTextBox\sdaps_textbox_hstretch:nnnnn
+\let\internCheck\sdaps_checkbox:nn
+\let\questEnd\sdaps_qobject_end:n
+\let\questCheckBoxType\sdaps_checkbox_set_type:n
+\let\mysetcheckboxtype\sdaps_checkbox_set_type:n
+\ExplSyntaxOff
+\newcommand{\questStart}[3]{%
+  \internQuestStart{#1}{#2}{#3}%
+  \internSDAPSSet{singlechoice = {width=2.5mm, height=2.5mm, linewidth=0.5bp}}%
+  \internSDAPSSet{multichoice = {width=2.5mm, height=2.5mm, linewidth=0.5bp}}%
+}
+\newcommand{\questSingleChoice}[2]{\phantom{ }\put(-1.25mm,-0.03){\internSingleChoice{#1}{#2}\questAnswer{#2}}}
+\newcommand{\questCheck}[2]{\phantom{ }\put(-1.25mm,-0.03){\internCheck{#1}{#2}\questAnswer{#2}}}
+\newcommand{\questTextBox}[3]{\parbox[c][\dimexpr #2 + 0.5cm\relax]{#3}{\internTextBox{#1}{0.5bp}{#2}{#3}{0}}\questAnswer{#2}}
+
+
+% Set up tcolorbox style
+\tcbset{colback=white,colframe=black,size=small,sharp corners,box align=center}
+
+
+\usepackage[inkscapeformat=pdf,inkscapelatex=false]{svg}
+
+\def\nritems{0.16}
+\def\nritemsheight{0.13}
+\def\sizeinstr{0.1}
+\def\sizemeta{0.02}
+\def\sizeself{0.12}
+
+\newcommand{\oitem}[3]{%
+% #1: id of the item
+% #2: level of the item
+% #3: name of the item
+\begin{tcolorbox}[width=\textwidth]
+\centering
+\includesvg[width=\textwidth]{../items/level-#2/#3.svg}\\%
+%
+\questSingleChoice{#1}{1} \phantom{m} This process model is sound. %
+\hspace{2cm} %
+\questSingleChoice{#1}{9999} \phantom{m} No answer
+\end{tcolorbox}%
+}
+\newcommand{\ooitem}[3]{%
+% #1: id of the item
+% #2: level of the item
+% #3: name of the item
+\begin{tcolorbox}[width=\textwidth]
+\centering
+\includesvg[width=\textwidth]{../items/level-#2/#3.svg}\\ %
+%
+\questSingleChoice{#1}{9999} \phantom{m} No answer
+\end{tcolorbox}%
+}
+
+\newcommand{\oinstr}[1]{%
+% #1: id of the item
+% #2: level of the item
+% #3: name of the item
+\begin{tcolorbox}[colframe=white,width=20cm]%
+\normalsize #1%
+\end{tcolorbox}%
+}
+
+\begin{document}
+
+\pagestyle{empty} % Remove page numbers
+
+\oinstr{%
+Please investigate the business process model in BPMN. %
+What modeling errors can you identify that would cause the model to behave \emph{unsound}? %
+\textbf{Mark each modeling error (as nodes, flows, subgraphs, etc.) with a circle.} %
+\textbf{If you cannot identify any modeling errors (i.e., the model is error-free in your opinion), use the option ``This process model is sound.''.} %
+If you cannot solve an exercise, please use the option ``No answer''.
+
+\oitem{ex1}{1}{AND-AND}
+}%
+
+\end{document}
