@@ -27,6 +27,7 @@ In this repository, you will find:
 		- [/level-8](exercises/items/level-8): 4 exercises with dead loops and livelocks to complete (as ```.svg```).
 		- [/level-9](exercises/items/level-9): 9 advanced cyclic non-block-structured exercises with "open" gateways (as ```.svg```).
 		- [/level-10](exercises/items/level-10): 18 complex exercises with "open" gateways (as ```.svg```).
+    - [/template](exercises/template): 2 tex files (with 2 PDFs) providing an example on how to create single PDF exercises.
 - [/data](data): Some data sets resulting from experiments/studies/tests.
 
 **Note:** Use *BPMNinvest* to teach the 7SV interactively. A demo is freely available at: (https://guybrushprince.github.io/bpmninvest/)[https://guybrushprince.github.io/bpmninvest/].
